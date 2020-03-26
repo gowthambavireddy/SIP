@@ -37,11 +37,11 @@ class MyAccountCallback(pj.AccountCallback):
 
     # Notification on incoming call
     def on_incoming_call(self, call):
-        global current_call 
+        global current_call
         if current_call:
             call.answer(486, "Busy")
             return
-            
+
         print("Incoming call from ", call.info().remote_uri)
         print("Press 'a' to answer")
 
@@ -52,7 +52,7 @@ class MyAccountCallback(pj.AccountCallback):
 
         current_call.answer(180)
 
-        
+
 # Callback to receive events from Call
 class MyCallCallback(pj.CallCallback):
 
@@ -64,9 +64,9 @@ class MyCallCallback(pj.CallCallback):
         global current_call
         print("Call with", self.call.info().remote_uri, end=' ')
         print("is", self.call.info().state_text, end=' ')
-        print("last code =", self.call.info().last_code, end=' ') 
+        print("last code =", self.call.info().last_code, end=' ')
         print("(" + self.call.info().last_reason + ")")
-        
+
         if self.call.info().state == pj.CallState.DISCONNECTED:
             current_call = None
             print('Current call is', current_call)
@@ -90,7 +90,7 @@ def make_call(uri):
     except pj.Error as e:
         print("Exception: " + str(e))
         return None
-        
+
 
 # Create library instance
 lib = pj.Lib()
@@ -101,14 +101,14 @@ try:
     lib.init(log_cfg = pj.LogConfig(level=LOG_LEVEL, callback=log_cb))
 
     trans_conf = pj.TransportConfig()
-	trans_conf.port = 5060
-	trans_conf.bound_addr = "192.168.0.50"
+    trans_conf.port = 5060
+    trans_conf.bound_addr = "192.168.0.50"
 
     # Create UDP transport which listens to any available port
     transport = lib.create_transport(pj.TransportType.UDP, trans_conf)
-    print("\nListening on", transport.info().host, end=' ') 
+    print("\nListening on", transport.info().host, end=' ')
     print("port", transport.info().port, "\n")
-    
+
     # Start the library
     lib.start()
 
@@ -135,7 +135,7 @@ try:
             if current_call:
                 print("Already have another call")
                 continue
-            print("Enter destination URI to call: ", end=' ') 
+            print("Enter destination URI to call: ", end=' ')
             input = sys.stdin.readline().rstrip("\r\n")
             if input == "":
                 continue
