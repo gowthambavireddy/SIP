@@ -20,6 +20,7 @@
 #
 import sys
 import pjsua as pj
+import time
 
 LOG_LEVEL = 3
 current_call = None
@@ -116,7 +117,8 @@ try:
 
     # Create local account
     acc = lib.create_account_for_transport(transport, cb=MyAccountCallback())
-
+    print(acc.info())
+    time.sleep(10)
     # If argument is specified then make call to the URI
     if len(sys.argv) > 1:
         lck = lib.auto_lock()
