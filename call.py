@@ -117,8 +117,10 @@ try:
 
     # Create local account
     acc = lib.create_account_for_transport(transport, cb=MyAccountCallback())
-    print(acc.info())
     time.sleep(10)
+    print("Registration Status-------------")
+    print(acc.info().reg_status)
+
     # If argument is specified then make call to the URI
     if len(sys.argv) > 1:
         lck = lib.auto_lock()
