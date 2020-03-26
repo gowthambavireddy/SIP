@@ -1,4 +1,4 @@
-# $Id$
+# $Id: call.py 2171 2008-07-24 09:01:33Z bennylp $
 #
 # SIP call sample.
 #
@@ -26,7 +26,7 @@ current_call = None
 
 # Logging callback
 def log_cb(level, str, len):
-    print str,
+    print(str, end=' ')
 
 
 # Callback to receive events from account
@@ -42,8 +42,8 @@ class MyAccountCallback(pj.AccountCallback):
             call.answer(486, "Busy")
             return
             
-        print "Incoming call from ", call.info().remote_uri
-        print "Press 'a' to answer"
+        print("Incoming call from ", call.info().remote_uri)
+        print("Press 'a' to answer")
 
         current_call = call
 
@@ -62,14 +62,14 @@ class MyCallCallback(pj.CallCallback):
     # Notification when call state has changed
     def on_state(self):
         global current_call
-        print "Call with", self.call.info().remote_uri,
-        print "is", self.call.info().state_text,
-        print "last code =", self.call.info().last_code, 
-        print "(" + self.call.info().last_reason + ")"
+        print("Call with", self.call.info().remote_uri, end=' ')
+        print("is", self.call.info().state_text, end=' ')
+        print("last code =", self.call.info().last_code, end=' ') 
+        print("(" + self.call.info().last_reason + ")")
         
         if self.call.info().state == pj.CallState.DISCONNECTED:
             current_call = None
-            print 'Current call is', current_call
+            print('Current call is', current_call)
 
     # Notification when call's media state has changed.
     def on_media_state(self):
@@ -78,17 +78,17 @@ class MyCallCallback(pj.CallCallback):
             call_slot = self.call.info().conf_slot
             pj.Lib.instance().conf_connect(call_slot, 0)
             pj.Lib.instance().conf_connect(0, call_slot)
-            print "Media is now active"
+            print("Media is now active")
         else:
-            print "Media is inactive"
+            print("Media is inactive")
 
 # Function to make call
 def make_call(uri):
     try:
-        print "Making call to", uri
+        print("Making call to", uri)
         return acc.make_call(uri, cb=MyCallCallback())
-    except pj.Error, e:
-        print "Exception: " + str(e)
+    except pj.Error as e:
+        print("Exception: " + str(e))
         return None
         
 
@@ -99,14 +99,15 @@ try:
     # Init library with default config and some customized
     # logging config.
     lib.init(log_cfg = pj.LogConfig(level=LOG_LEVEL, callback=log_cb))
-	trans_conf = pj.TransportConfig()
+
+    trans_conf = pj.TransportConfig()
 	trans_conf.port = 5060
 	trans_conf.bound_addr = "192.168.0.50"
 
     # Create UDP transport which listens to any available port
     transport = lib.create_transport(pj.TransportType.UDP, trans_conf)
-    print "\nListening on", transport.info().host, 
-    print "port", transport.info().port, "\n"
+    print("\nListening on", transport.info().host, end=' ') 
+    print("port", transport.info().port, "\n")
     
     # Start the library
     lib.start()
@@ -118,7 +119,7 @@ try:
     if len(sys.argv) > 1:
         lck = lib.auto_lock()
         current_call = make_call(sys.argv[1])
-        print 'Current call is', current_call
+        print('Current call is', current_call)
         del lck
 
     my_sip_uri = "sip:" + transport.info().host + \
@@ -126,15 +127,15 @@ try:
 
     # Menu loop
     while True:
-        print "My SIP URI is", my_sip_uri
-        print "Menu:  m=make call, h=hangup call, a=answer call, q=quit"
+        print("My SIP URI is", my_sip_uri)
+        print("Menu:  m=make call, h=hangup call, a=answer call, q=quit")
 
         input = sys.stdin.readline().rstrip("\r\n")
         if input == "m":
             if current_call:
-                print "Already have another call"
+                print("Already have another call")
                 continue
-            print "Enter destination URI to call: ", 
+            print("Enter destination URI to call: ", end=' ') 
             input = sys.stdin.readline().rstrip("\r\n")
             if input == "":
                 continue
@@ -144,13 +145,13 @@ try:
 
         elif input == "h":
             if not current_call:
-                print "There is no call"
+                print("There is no call")
                 continue
             current_call.hangup()
 
         elif input == "a":
             if not current_call:
-                print "There is no call"
+                print("There is no call")
                 continue
             current_call.answer(200)
 
@@ -164,8 +165,8 @@ try:
     lib.destroy()
     lib = None
 
-except pj.Error, e:
-    print "Exception: " + str(e)
+except pj.Error as e:
+    print("Exception: " + str(e))
     lib.destroy()
     lib = None
 
