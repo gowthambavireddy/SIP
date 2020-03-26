@@ -21,8 +21,9 @@
 import sys
 import pjsua as pj
 
-LOG_LEVEL=3
+LOG_LEVEL = 3
 current_call = None
+
 
 # Logging callback
 def log_cb(level, str, len):
@@ -82,6 +83,7 @@ class MyCallCallback(pj.CallCallback):
         else:
             print("Media is inactive")
 
+
 # Function to make call
 def make_call(uri):
     try:
@@ -98,7 +100,7 @@ lib = pj.Lib()
 try:
     # Init library with default config and some customized
     # logging config.
-    lib.init(log_cfg = pj.LogConfig(level=LOG_LEVEL, callback=log_cb))
+    lib.init(log_cfg=pj.LogConfig(level=LOG_LEVEL, callback=log_cb))
 
     trans_conf = pj.TransportConfig()
     trans_conf.port = 5060
@@ -122,7 +124,9 @@ try:
         print('Current call is', current_call)
         del lck
 
-    my_sip_uri = "sip:" + transport.info().host + \
+    # my_sip_uri = "sip:" + transport.info().host + \
+    #              ":" + str(transport.info().port)
+    my_sip_uri = "sip:" + "gowtham@philly.sip.twilio.com" + \
                  ":" + str(transport.info().port)
 
     # Menu loop
@@ -169,4 +173,3 @@ except pj.Error as e:
     print("Exception: " + str(e))
     lib.destroy()
     lib = None
-
