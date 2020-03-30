@@ -64,8 +64,8 @@ class MyCallCallback(pj.CallCallback):
         if self.call.info().media_state == pj.MediaState.ACTIVE:
             # Connect the call to sound device
             call_slot = self.call.info().conf_slot
-            pj.Lib.instance().conf_connect(call_slot, 1)
-            pj.Lib.instance().conf_connect(1, call_slot)
+            pj.Lib.instance().conf_connect(call_slot, 3)
+            pj.Lib.instance().conf_connect(3, call_slot)
             print("Media is now active")
         else:
             print("Media is inactive")
@@ -134,7 +134,7 @@ try:
 
     lib.start()
 
-    # lib.set_null_snd_dev()
+    lib.set_null_snd_dev()
 
     # Configuring Account class to register with Registrar server
 
