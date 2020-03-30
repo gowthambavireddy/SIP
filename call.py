@@ -1,22 +1,8 @@
-# $Id: call.py 2171 2008-07-24 09:01:33Z bennylp $
 #
 # SIP call sample.
 #
-# Copyright (C) 2003-2008 Benny Prijono <benny@prijono.org>
-#
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA 
+# Copyright (C) Gowtham Bavireddy<gowtham.bavireddy@philips.com>
+
 #
 import sys
 import pjsua as pj
@@ -78,8 +64,8 @@ class MyCallCallback(pj.CallCallback):
         if self.call.info().media_state == pj.MediaState.ACTIVE:
             # Connect the call to sound device
             call_slot = self.call.info().conf_slot
-            pj.Lib.instance().conf_connect(call_slot, 0)
-            pj.Lib.instance().conf_connect(0, call_slot)
+            pj.Lib.instance().conf_connect(call_slot, 1)
+            pj.Lib.instance().conf_connect(1, call_slot)
             print("Media is now active")
         else:
             print("Media is inactive")
@@ -102,19 +88,19 @@ try:
     # # Init library with default config and some customized
     # # logging config.
     # lib.init(log_cfg=pj.LogConfig(level=LOG_LEVEL, callback=log_cb))
-    # 
+    #
     # trans_conf = pj.TransportConfig()
     # trans_conf.port = 5060
     # trans_conf.bound_addr = "192.168.0.50"
-    # 
+    #
     # # Create UDP transport which listens to any available port
     # transport = lib.create_transport(pj.TransportType.UDP, trans_conf)
     # print("\nListening on", transport.info().host, end=' ')
     # print("port", transport.info().port, "\n")
-    # 
+    #
     # # Start the library
     # lib.start()
-    # 
+    #
     # # Create local account
     # acc = lib.create_account_for_transport(transport, cb=MyAccountCallback())
     # time.sleep(10)
