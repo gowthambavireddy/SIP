@@ -138,8 +138,8 @@ try:
 
     lib.start()
     print("Current devices are : ",lib.get_snd_dev())
-    lib.set_null_snd_dev()
-    print("Current devices are : ", lib.get_snd_dev())
+    # lib.set_null_snd_dev()
+    # print("Current devices are : ", lib.get_snd_dev())
 
     # Configuring Account class to register with Registrar server
 
