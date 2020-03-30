@@ -137,9 +137,10 @@ try:
     # Starting the instance of Lib class
 
     lib.start()
-    print("Current devices are : ",lib.get_snd_dev())
+    print("Current devices are : ", lib.get_snd_dev())
+    lib.set_snd_dev(-1, -2)
     # lib.set_null_snd_dev()
-    # print("Current devices are : ", lib.get_snd_dev())
+    print("Current devices are : ", lib.get_snd_dev())
 
     # Configuring Account class to register with Registrar server
 
