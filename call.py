@@ -72,8 +72,9 @@ class MyCallCallback(pj.CallCallback):
 
 
 # Function to make call
-def make_call(uri):
+def make_call(name):
     try:
+        uri = "sip:" + name + "@philly.sip.us1.twilio.com"
         print("Making call to", uri)
         return acc.make_call(uri, cb=MyCallCallback())
     except pj.Error as e:
@@ -133,7 +134,7 @@ try:
 
     lib.start()
 
-    lib.set_null_snd_dev()
+    # lib.set_null_snd_dev()
 
     # Configuring Account class to register with Registrar server
 
