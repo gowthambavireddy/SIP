@@ -99,27 +99,93 @@ def make_call(uri):
 lib = pj.Lib()
 
 try:
-    # Init library with default config and some customized
-    # logging config.
-    lib.init(log_cfg=pj.LogConfig(level=LOG_LEVEL, callback=log_cb))
+    # # Init library with default config and some customized
+    # # logging config.
+    # lib.init(log_cfg=pj.LogConfig(level=LOG_LEVEL, callback=log_cb))
+    # 
+    # trans_conf = pj.TransportConfig()
+    # trans_conf.port = 5060
+    # trans_conf.bound_addr = "192.168.0.50"
+    # 
+    # # Create UDP transport which listens to any available port
+    # transport = lib.create_transport(pj.TransportType.UDP, trans_conf)
+    # print("\nListening on", transport.info().host, end=' ')
+    # print("port", transport.info().port, "\n")
+    # 
+    # # Start the library
+    # lib.start()
+    # 
+    # # Create local account
+    # acc = lib.create_account_for_transport(transport, cb=MyAccountCallback())
+    # time.sleep(10)
+    # print("Registration Status-------------")
+    # print(acc.info().reg_status)
+    # Start of the Main Class
+
+    # Instantiate library with default config
+
+    lib.init(log_cfg=pj.LogConfig(level=3, callback=log_cb))
+
+    # Configuring one Transport Object and setting it to listen at 5060 port and UDP protocol
 
     trans_conf = pj.TransportConfig()
-    trans_conf.port = 5060
-    trans_conf.bound_addr = "192.168.0.50"
 
-    # Create UDP transport which listens to any available port
+    print("-------------------------LETS START THE REGISTRATION PROCESS----------------------")
+    print("\n\n")
+
+    trans_conf.port = 5060  # 5060 is default port for SIP
+
+    # a=input("Please Enter the IP address of the Client: ")
+    a = "192.168.0.50"  # Local VM IP
+    print("Using the default port number for SIP: 5060")
+
+    trans_conf.bound_addr = a
+
     transport = lib.create_transport(pj.TransportType.UDP, trans_conf)
-    print("\nListening on", transport.info().host, end=' ')
-    print("port", transport.info().port, "\n")
 
-    # Start the library
+    # Starting the instance of Lib class
+
     lib.start()
 
-    # Create local account
-    acc = lib.create_account_for_transport(transport, cb=MyAccountCallback())
+    lib.set_null_snd_dev()
+
+    # Configuring Account class to register with Registrar server
+
+    # Giving information to create header of REGISTER SIP message
+
+    # ab4=input("Enter IP address of the Server: ")
+    ab4 = "philly.sip.us1.twilio.com"  # Asteriek server IP
+    # ab=input("Enter Username: ")
+    ab = "gowtham"
+    # ab1=input("Enter Password: ")
+    ab1 = "Gowtham_password123"
+    # ab2=input("Do you want to use the display name same as the username  Y/N ??")
+    ab2 = "Y"
+    if ab2 == "y" or ab2 == "Y":
+        ab3 = ab
+    else:
+        ab3 = input("Enter Display Name: ")
+
+    acc_conf = pj.AccountConfig(ab4, ab, ab1)
+
+    # registrar = 'sip:'+ab4+':5060', proxy = 'sip:'+ab4+':5060')
+
+    # acc_conf.id ="sip:"+ab
+
+    # acc_conf.reg_uri ='sip:'+ab4+':5060'
+
+    acc_callback = MyAccountCallback(acc_conf)
+
+    acc = lib.create_account(acc_conf)
+
+    # creating instance of AccountCallback class
+
+    acc.set_callback(acc_callback)
+
     time.sleep(10)
-    print("Registration Status-------------")
-    print(acc.info().reg_status)
+    print('\n')
+    print("Registration Complete-----------")
+    print(('Status= ', acc.info().reg_status, '(' + acc.info().reg_reason + ')'))
 
     # If argument is specified then make call to the URI
     if len(sys.argv) > 1:
@@ -128,14 +194,14 @@ try:
         print('Current call is', current_call)
         del lck
 
-    # my_sip_uri = "sip:" + transport.info().host + \
+    # # my_sip_uri = "sip:" + transport.info().host + \
+    # #              ":" + str(transport.info().port)
+    # my_sip_uri = "sip:" + "gowtham@philly.sip.twilio.com" + \
     #              ":" + str(transport.info().port)
-    my_sip_uri = "sip:" + "gowtham@philly.sip.twilio.com" + \
-                 ":" + str(transport.info().port)
 
     # Menu loop
     while True:
-        print("My SIP URI is", my_sip_uri)
+        # print("My SIP URI is", my_sip_uri)
         print("Menu:  m=make call, h=hangup call, a=answer call, q=quit")
 
         input = sys.stdin.readline().rstrip("\r\n")
